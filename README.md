@@ -2,10 +2,11 @@
 A simple python application that is intended to rename files in a specific format and split archives into 2GB parts
 
 **This code is a work in progress**
+**theres probably a lot of use cases i didnt try, let me know if you find bugs**
 
 # How it works
 
-The application has several fields for user input which are used in the naming.  The user can drag and drop files they want renamed into the window.  The files will all be named according to the selected type and any 7z, zip, or rar files will all be extracted and rezipped with 7zip to ensure they are under 2GB limit.  The package includes a version of 7zip however, its limited to 7zip and zip files.  The application will use the installed version of 7zip if its found at the path defined in the application under "z_install"
+The application has several fields for user input which are used in the naming.  The user can drag and drop files they want renamed into the window.  The files will all be named according to the selected type and any 7z, zip, or rar files will all be extracted and rezipped with 7zip to ensure they are under 2GB limit.  The package includes a version of 7zip however, its limited to 7zip and zip files.  The application will use the installed version of 7zip if its found at the path defined in the application under "z_install".  If there are multiple files that would be named the same, the application will append a number to the filename to differentiate them.
 
 # Getting Started
 1. [install python 3](https://www.python.org/downloads/)
