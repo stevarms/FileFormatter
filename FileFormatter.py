@@ -8,10 +8,13 @@ from kivy.uix.recycleview import RecycleView
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty, ListProperty
 from kivy.core.window import Window
+from kivy.factory import Factory
 from kivy.uix.popup import Popup
 from kivymd.uix.picker import MDDatePicker
+from kivy.uix.floatlayout import FloatLayout
 from kivy.clock import Clock
 from functools import partial
+from plyer import filechooser
 import pyperclip
 import subprocess
 import os
@@ -178,6 +181,13 @@ KV = """
             pos_hint: {'center_x': .5, 'center_y': .5}
             on_release:
                 app.copy_click()
+    MDRaisedButton:
+        text: 'Browse'
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        on_release: app.show_load()
+    MDLabel:
+        text: ""
+    
 
 BoxLayout:
     orientation: 'vertical'
@@ -300,7 +310,10 @@ class PopupBox(Popup):
 
     def update_pop_up_text(self, p_message):
         self.pop_up_text.text = p_message
-
+        
+class LoadDialog(FloatLayout):
+    load = ObjectProperty(None)
+    cancel = ObjectProperty(None)
 
 class Application(MDApp):
     data = ListProperty()
@@ -308,6 +321,7 @@ class Application(MDApp):
     date_string = ObjectProperty()
     type_entry = ObjectProperty()
     telegram_tags = ObjectProperty()
+    loadfile = ObjectProperty(None)
     zip_level = ObjectProperty()
 
     def build(self):
@@ -327,6 +341,15 @@ class Application(MDApp):
             'text': file_path.decode('UTF-8')
         })
         return
+
+    def show_load(self):
+        files = filechooser.open_file(title="Choose files..", multiple=True,
+                             filters=[("All Files", "*.*")])
+        for path in files:
+            self.data.append({
+                'index': len(self.data),
+                'text': path
+        })
 
     def zip(self, file):
         filename = os.path.basename(file)
@@ -462,6 +485,7 @@ class Application(MDApp):
     def copy_click(self):
         pyperclip.copy(self.telegram_tags)
 
+Factory.register('LoadDialog', cls=LoadDialog)
 
 if __name__ == '__main__':
     Application().run()
