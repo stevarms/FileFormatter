@@ -1,6 +1,7 @@
 #! /usr/bin/python3
 # -*- coding:utf-8 -*-
 # apt-get install p7zip-full
+from msilib.schema import CheckBox
 import threading
 from datetime import datetime
 from kivymd.app import MDApp
@@ -14,6 +15,7 @@ from kivymd.uix.picker import MDDatePicker
 from kivy.uix.floatlayout import FloatLayout
 from kivy.clock import Clock
 from functools import partial
+from kivymd.uix.tooltip import MDTooltip
 from plyer import filechooser
 import pyperclip
 import subprocess
@@ -40,6 +42,8 @@ elif platform.system() == "Mac":
 
 KV = """
 #:import rgba kivy.utils.rgba
+<TooltipCheckbox@CheckBox+MDTooltip>
+<TooltipMDLabel@MDLabel+MDTooltip>
 <LogLabel@RelativeLayout>:
     # using a boxlayout here allows us to have better control of the text
     # position
@@ -68,45 +72,67 @@ KV = """
     row_default_height: 30
     MDLabel:
         size_hint_x: None
-        width: 200
-        text: 'Type'
+        width: 125
+        text: 'Type:'
     GridLayout:
-        cols: 6
+        cols: 7
+        MDLabel:
+            text: 'Monthly'
+            halign: "right"
+            size_hint: 0.55, 1
         CheckBox:
             group: "type_selector"
             active: True
+            size_hint: 0.2, 1
             on_active: app.checkbox_click(self, self.active, "Monthly")
         MDLabel:
-            text: 'Monthly'
+            text: 'Kickstarter'
+            halign: "right"
+            size_hint: 0.75, 1
         CheckBox:
             group: "type_selector"
+            size_hint: 0.2, 1
             on_active: app.checkbox_click(self, self.active, "Kickstarter")
         MDLabel:
-            text: 'Kickstarter'
+            text: 'Trove'
+            halign: "right"
+            size_hint: 0.5, 1
         CheckBox:
             group: "type_selector"
+            size_hint: 0.2, 1
             on_active: app.checkbox_click(self, self.active, "Trove")
         MDLabel:
-            text: 'Trove'
+            text: ''
+            size_hint: 2, 1
     MDLabel:
         size_hint_x: None
-        width: 200
-        text: 'Creator'
-    TextInput:
-        id: creator_entry
-        font_size: 16
-        multiline: False
-        write_tab: False
-        hint_text: 'E.G. Lord of the Print'
+        width: 125
+        text: 'Creator:'
+    BoxLayout:
+        orientation: 'horizontal'
+        MDLabel:
+            text: ''
+            size_hint_x: None
+            width: 25
+        TextInput:
+            id: creator_entry
+            font_size: 16
+            multiline: False
+            write_tab: False
+            hint_text: 'E.G. Lord of the Print'
     MDLabel:
         size_hint_x: None
-        width: 200
-        text: 'Date'
+        width: 125
+        text: 'Date:'
         opacity: 1 if app.type_entry == "Monthly" else 0
     BoxLayout:
         orientation: 'horizontal'
         spacing: dp(2)
         opacity: 1 if app.type_entry == "Monthly" else 0
+        MDLabel:
+            text: ''
+            size_hint_x: None
+            width: 25
         MDLabel:
             id: date_string
             text: app.date_string
@@ -117,62 +143,93 @@ KV = """
             on_release: app.show_date_picker()
     MDLabel:
         size_hint_x: None
-        width: 200
-        text: 'Description'
-    TextInput:
-        id: description_entry
-        font_size: 16
-        multiline: False
-        write_tab: False
-        hint_text: 'optional' if app.type_entry != "Trove" else 'E.G. wing bits'
-    MDLabel:
-        size_hint_x: None
-        width: 200
-        text: 'Repack Zip'
+        width: 125
+        text: 'Description:'
     BoxLayout:
-        CheckBox:
+        orientation: 'horizontal'
+        MDLabel:
+            text: ''
+            size_hint_x: None
+            width: 25
+        TextInput:
+            id: description_entry
+            font_size: 16
+            multiline: False
+            write_tab: False
+            hint_text: 'optional' if app.type_entry == "Monthly" else 'E.G. wing bits'
+    TooltipMDLabel:
+        size_hint_x: None
+        width: 125
+        text: 'Repack Zip:'
+        tooltip_text: 'Extract files then rezip in 2GB parts'
+    BoxLayout:
+        id: zipbox
+        TooltipCheckbox:
             id: rezip
             active: True
-            size_hint: 0.065, 1
-        MDLabel:
-            text: 'Delete old archive'
-            size_hint_x: None
-            width: 200
-        CheckBox:
+            size_hint: 0.1, 1
+            tooltip_text: 'Extract files then rezip in 2GB parts'
+        TooltipMDLabel:
+            text: 'Delete Old Zip:'
+            size_hint: 0.49, 1
+            halign: "right"
+            tooltip_text: 'If enabled original zip will be deleted, otherwise it will be renamed to *-old'
+        TooltipCheckbox:
             id: delete_after
             active: True
-            size_hint: 0.2, 1
-    MDLabel:
-        text: 'Compression Level:'
-        width: 200
+            size_hint: 0.4, 1
+            tooltip_text: 'If enabled original zip will be deleted, otherwise it will be renamed to *-old'
+    TooltipMDLabel:
+        text: 'Compression:'
+        tooltip_text: 'How much 7zip will attempt to compress the files. low is faster, high makes a smaller zip'
+        width: 125
         size_hint_x: None
     GridLayout:
-        cols: 6
+        cols: 7
+        TooltipMDLabel:
+            text: 'Low'
+            halign: "right"
+            size_hint: 0.35, 1
+            tooltip_text: 'How much 7zip will attempt to compress the files. low is faster, high makes a smaller zip'
         CheckBox:
             group: "zip_selector"
             on_active: app.zip_checkbox_click(self, self.active, "-mx=1")
-        MDLabel:
-            text: 'Low'
+            size_hint: 0.2, 1
+        TooltipMDLabel:
+            text: 'Medium'
+            halign: "right"
+            size_hint: 0.8, 1
+            tooltip_text: 'How much 7zip will attempt to compress the files. low is faster, high makes a smaller zip'
         CheckBox:
             group: "zip_selector"
             on_active: app.zip_checkbox_click(self, self.active, "-mx=5")
-        MDLabel:
-            text: 'Med'
+            size_hint: 0.2, 1
+        TooltipMDLabel:
+            text: 'High'
+            halign: "right"
+            size_hint: 0.6, 1
+            tooltip_text: 'How much 7zip will attempt to compress the files. low is faster, high makes a smaller zip'
         CheckBox:
             group: "zip_selector"
             active: True
             on_active: app.zip_checkbox_click(self, self.active, "-mx=9")
+            size_hint: 0.2, 1
         MDLabel:
-            text: 'High'
+            text: ''
+            size_hint: 2, 1
     MDLabel:
         size_hint_x: None
-        width: 200
-        text: 'Telegram Tags'
+        width: 125
+        text: 'Telegram Tags:'
         opacity: 0 if not app.telegram_tags else 1
     BoxLayout:
         orientation: 'horizontal'
         spacing: dp(2)
         opacity: 0 if not app.telegram_tags else 1
+        MDLabel:
+            text: ''
+            size_hint_x: None
+            width: 25
         MDLabel:
             text: app.telegram_tags
             pos_hint: {'center_x': .95, 'center_y': .4}
@@ -189,15 +246,14 @@ KV = """
         text: ""
     
 
-BoxLayout:
-    orientation: 'vertical'
+GridLayout:
+    cols: 1
     spacing: dp(2)
     Properties:
         id: properties
     Label:
         opacity: 1 if not app.data else 0
         size_hint_y: None
-        pos_hint: {'top': 1}
         text: 'Drag & Drop files here'    
     FixedRecycleView:
         size_hint: 1,2
@@ -288,8 +344,8 @@ def file_split_7z(folder_path, compression_level, split_size=MAX_SPLIT_SIZE):
 
 def do_file_split(file_path, split_size=MAX_SPLIT_SIZE):
     """caculate split size
-       example max split size is 1495 file size is 2000
-       than the split part num should be int(2000 / 1495 + 0.5) = 2
+       example max split size is 1495 file size is 1500
+       than the split part num should be int(1500 / 1495 + 0.5) = 2
        so the split size should be 1000 + 1000 but not 1495 + 505
        with the file size increase the upload risk would be increase too
     """
