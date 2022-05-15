@@ -29,7 +29,7 @@ The application has several fields for user input which are used in the naming. 
 3. optionally install [7zip](https://www.7-zip.org/) for .rar support
     * if you dont use the default install path or you use mac you need to update the z_install property in FileFormatter.py.  
     * Its set to `z_install = r"C:\Program Files\7-Zip\7z.exe` by default
-4. run FileFormatter.py `py path_to_location/fileformatter.py' from the command line
+4. run "run.bat" to launch Fileformatter
 
 # Detailed Manual Install Guide (only use if the install scripts wont work for you ie linux & mac users)
 1. [install python 3](https://www.python.org/downloads/)
