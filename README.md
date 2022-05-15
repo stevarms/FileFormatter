@@ -25,12 +25,13 @@ The application has several fields for user input which are used in the naming. 
 
 # Getting Started
 1. [install python 3](https://www.python.org/downloads/)
-2. update pip `py -m pip install --upgrade pip`
-3. install the requirements with pip `py -m pip install -r .\requirements.txt`
-4. optionally install 7zip and specify the install path in the script.  Its set to `z_install = r"C:\Program Files\7-Zip\7z.exe` by default
-7. run FileFormatter.py `py path_to_location/fileformatter.py' from the command line
+2. run "setup.bat" it will automaticaly update pip and install the requirements.
+3. optionally install [7zip](https://www.7-zip.org/) for .rar support
+    * if you dont use the default install path or you use mac you need to update the z_install property in FileFormatter.py.  
+    * Its set to `z_install = r"C:\Program Files\7-Zip\7z.exe` by default
+4. run FileFormatter.py `py path_to_location/fileformatter.py' from the command line
 
-# More Detailed instructions for the non tech saavy
+# Detailed Manual Install Guide (only use if the install scripts wont work for you ie linux & mac users)
 1. [install python 3](https://www.python.org/downloads/)
     * download and run the installer dont worry about any options it asks we dont really need them
     * <details>
@@ -54,7 +55,7 @@ The application has several fields for user input which are used in the naming. 
 7. [Install 7zip](https://www.7-zip.org/)
     * you probably want the 64 bit version, just run the installer and click next to everything we dont require any special settings.
     * this step is optional but if you dont do it you wont be able to use .rar files with the program
-    * if you dont install 7zip to the default path you need to edit the FileFormatter.py file and change the z_install variable
+    * if you dont install 7zip to the default path you need to edit the FileFormatter.py file and change the z_install variable in FileFormatter.py
     * <details>
         <summary>click here to see what the download button looks like</summary>
 
