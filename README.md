@@ -67,7 +67,6 @@ The application has several fields for user input which are used in the naming. 
   
 # Known issues
 * UI is pretty ugly
-* I'll look into making it easier to run/install
 
 # Planned Features
 none yet
