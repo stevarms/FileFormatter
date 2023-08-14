@@ -11,7 +11,7 @@ from kivy.properties import ObjectProperty, ListProperty
 from kivy.core.window import Window
 from kivy.factory import Factory
 from kivy.uix.popup import Popup
-from kivymd.uix.picker import MDDatePicker
+from kivymd.uix.pickers import MDDatePicker
 from kivy.uix.floatlayout import FloatLayout
 from kivy.clock import Clock
 from functools import partial
