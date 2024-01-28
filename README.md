@@ -33,7 +33,7 @@ The application has several fields for user input which are used in the naming. 
 5. run "run.bat" to launch Fileformatter
 
 # Detailed Manual Install Guide (only use if the install scripts wont work for you ie linux & mac users)
-1. [install python 3](https://www.python.org/downloads/)
+1. [install python 3.11](https://www.python.org/downloads/)
     * download and run the installer dont worry about any options it asks we dont really need them
     * <details>
         <summary>click here to see what the download button looks like</summary>
