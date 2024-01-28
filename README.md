@@ -24,7 +24,7 @@ The application has several fields for user input which are used in the naming. 
 * it should work on mac and even linux but i've never tested it
 
 # Getting Started
-1. [install python 3](https://www.python.org/downloads/)
+1. [install python 3.11](https://www.python.org/downloads/)
 2. download [FileFormatter.zip](https://github.com/stevarms/FileFormatter/releases) and extract it
 3. run "setup.bat" it will automaticaly update pip and install the requirements.
 4. optionally install [7zip](https://www.7-zip.org/) for .rar support
